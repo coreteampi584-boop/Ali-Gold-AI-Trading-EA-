@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Ali Shah Gold EA — automated trading software for MetaTrader 5, focused on XAUUSD (Gold).">
+  <title>Ali Shah Gold EA | XAUUSD Trading EA</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #121a2d;
+      --panel2: #17223a;
+      --text: #f5f7fb;
+      --muted: #b8c2d8;
+      --gold: #f4c65e;
+      --gold2: #ffe6a1;
+      --line: rgba(255,255,255,.12);
+      --green: #8be0b1;
+      --red: #ffb4a9;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; color: var(--text); background:
+        radial-gradient(circle at 80% 0%, rgba(244,198,94,.13), transparent 30rem),
+        linear-gradient(180deg, #0b1020, #0d1426 55%, #0a0f1d);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+    a { color: inherit; }
+    .wrap { width: min(1100px, 92%); margin: auto; }
+    header { border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 10; background: rgba(11,16,32,.92); backdrop-filter: blur(12px); }
+    .nav { min-height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+    .brand { font-weight: 850; letter-spacing: .2px; }
+    .brand span { color: var(--gold); }
+    nav { display: flex; flex-wrap: wrap; gap: 18px; font-size: .92rem; }
+    nav a { color: var(--muted); text-decoration: none; }
+    nav a:hover { color: var(--gold2); }
+    .hero { padding: 78px 0 58px; display: grid; grid-template-columns: 1.3fr .7fr; gap: 34px; align-items: center; }
+    .eyebrow { display: inline-block; color: var(--gold2); border: 1px solid rgba(244,198,94,.35); background: rgba(244,198,94,.08); border-radius: 99px; padding: 6px 12px; font-size: .83rem; }
+    h1 { font-size: clamp(2.3rem, 6vw, 4.4rem); line-height: 1.06; letter-spacing: -1.7px; margin: 18px 0; }
+    h1 em { color: var(--gold); font-style: normal; }
+    .lead { color: var(--muted); font-size: 1.08rem; max-width: 650px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+    .btn { display: inline-flex; justify-content: center; align-items: center; gap: 8px; border-radius: 12px; padding: 12px 18px; font-weight: 800; text-decoration: none; border: 1px solid var(--line); }
+    .btn.primary { background: var(--gold); color: #211806; border-color: var(--gold); }
+    .btn.primary:hover { background: var(--gold2); }
+    .btn.secondary { background: rgba(255,255,255,.04); color: var(--text); }
+    .hero-card, .card { background: linear-gradient(160deg, rgba(255,255,255,.06), rgba(255,255,255,.025)); border: 1px solid var(--line); border-radius: 22px; padding: 25px; box-shadow: 0 18px 55px rgba(0,0,0,.15); }
+    .price-label { color: var(--muted); font-size: .9rem; }
+    .price { font-size: 3.1rem; font-weight: 900; letter-spacing: -1.5px; margin: 4px 0; }
+    .price small { font-size: 1rem; color: var(--muted); letter-spacing: 0; }
+    .tick-list { list-style: none; padding: 0; margin: 18px 0 0; }
+    .tick-list li { padding: 8px 0; color: var(--muted); border-bottom: 1px solid var(--line); }
+    .tick-list li:last-child { border: 0; }
+    .tick-list li::before { content: "✓"; color: var(--green); font-weight: 900; margin-right: 10px; }
+    section { padding: 48px 0; }
+    .section-head { margin-bottom: 22px; }
+    h2 { font-size: clamp(1.7rem, 3.5vw, 2.45rem); line-height: 1.2; margin: 0 0 9px; }
+    .sub { color: var(--muted); max-width: 760px; margin: 0; }
+    .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .card h3 { margin: 0 0 8px; font-size: 1.1rem; }
+    .card p { color: var(--muted); margin: 0; }
+    .icon { font-size: 1.45rem; margin-bottom: 10px; }
+    .payment-address { overflow-wrap: anywhere; padding: 13px; border: 1px dashed rgba(244,198,94,.45); background: rgba(244,198,94,.06); border-radius: 12px; color: var(--gold2); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92rem; }
+    .copy-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+    button.copy { cursor: pointer; background: var(--panel2); color: var(--text); border: 1px solid var(--line); border-radius: 10px; padding: 10px 13px; font-weight: 700; }
+    .notice { border-left: 3px solid var(--gold); padding: 12px 15px; background: rgba(244,198,94,.06); border-radius: 0 10px 10px 0; color: var(--muted); }
+    .field-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 15px; }
+    .field { padding: 14px; border-radius: 12px; background: rgba(255,255,255,.035); border: 1px solid var(--line); }
+    .field b { display: block; margin-bottom: 4px; }
+    .field span { color: var(--muted); font-size: .92rem; }
+    .small { font-size: .88rem; color: var(--muted); }
+    .faq details { border-bottom: 1px solid var(--line); padding: 15px 0; }
+    .faq summary { cursor: pointer; font-weight: 750; }
+    .faq details p { color: var(--muted); margin-bottom: 0; }
+    footer { border-top: 1px solid var(--line); padding: 28px 0 38px; color: var(--muted); font-size: .9rem; }
+    footer .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; padding-top: 48px; }
+      .grid3, .grid2, .field-list { grid-template-columns: 1fr; }
+      .nav { align-items: flex-start; padding: 14px 0; flex-direction: column; }
+      nav { gap: 12px; }
+      .price { font-size: 2.7rem; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <div class="brand">ALI SHAH <span>GOLD EA</span></div>
+    <nav aria-label="Main navigation">
+      <a href="#features">Features</a>
+      <a href="#results">Live Results</a>
+      <a href="#payment">Payment</a>
+      <a href="#order">Order</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div>
+      <span class="eyebrow">MetaTrader 5 · XAUUSD / Gold</span>
+      <h1>Trade Gold with <em>Ali Shah Gold EA</em></h1>
+      <p class="lead">An Expert Advisor for MetaTrader 5, designed for XAUUSD (Gold). Review the terms, submit your order form, and pay using USDT on the BEP20 network.</p>
+      <div class="actions">
+        <a class="btn primary" href="#order">Order EA — $100</a>
+        <a class="btn secondary" href="#payment">Payment Instructions</a>
+      </div>
+      <p class="small">Trading involves risk. The EA does not guarantee profits and may incur losses.</p>
+    </div>
+    <aside class="hero-card">
+      <div class="price-label">License price</div>
+      <div class="price">$100 <small>USD</small></div>
+      <p class="sub">Per license · One MT5 trading account</p>
+      <ul class="tick-list">
+        <li>For MetaTrader 5 (MT5)</li>
+        <li>Gold / XAUUSD focus</li>
+        <li>EA file delivered by email after payment verification</li>
+        <li>License code issued after account details are checked</li>
+      </ul>
+    </aside>
+  </div>
+
+  <section id="features">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Product Information</h2>
+        <p class="sub">Please read the license and risk information before placing an order.</p>
+      </div>
+      <div class="grid3">
+        <article class="card"><div class="icon">📈</div><h3>Gold-focused EA</h3><p>Built for use with XAUUSD (Gold) on MetaTrader 5. Confirm your broker's symbol name and trading conditions before use.</p></article>
+        <article class="card"><div class="icon">🔐</div><h3>One-account license</h3><p>Each $100 license is valid for one MT5 trading account only. Every additional account needs a separate license and separate $100 payment.</p></article>
+        <article class="card"><div class="icon">✉️</div><h3>Email delivery</h3><p>After manual payment verification, the EA file and license code will be sent to the Gmail address provided in your order.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="results">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Live Trading Results</h2>
+      <p class="sub">Use the read-only investor login below to view the live account yourself in MetaTrader 5.</p>
+    </div>
+    <div class="card">
+      <div class="field-list">
+        <div class="field"><b>Broker Name</b><span>Vantage Markets</span></div>
+        <div class="field"><b>MT5 Account ID</b><span>34581303</span></div>
+        <div class="field"><b>MT5 Server</b><span>VantageMarkets-Live11</span></div>
+        <div class="field"><b>Investor Password</b><span>Shakeel@1234</span></div>
+      </div>
+      <p class="notice" style="margin-top:16px">In MT5 go to File &rarr; Login to Trade Account and enter the Account ID, investor password and server. The investor password is view-only and cannot place trades. Past results do not guarantee future profit.</p>
+    </div>
+  </div>
+</section>
+
+  <section id="payment">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Payment Instructions</h2>
+        <p class="sub">Payment method: USDT on BNB Smart Chain (BEP20). Send only USDT using the correct network.</p>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h3>USDT BEP20 Receiving Address</h3>
+          <div class="payment-address" id="wallet">0xa5be396d8ea00958e73563d566715c8131da5cd4</div>
+          <div class="copy-row"><button class="copy" type="button" onclick="copyWallet()">Copy wallet address</button><span class="small" id="copy-status" aria-live="polite"></span></div>
+          <p class="small" style="margin-top:14px">Check the address and network carefully before sending. Blockchain transfers are usually irreversible. Never send a different token or use a different network.</p>
+        </div>
+        <div class="card">
+          <h3>After payment</h3>
+          <ul class="tick-list">
+            <li>Save your transaction ID (TXID).</li>
+            <li>Take a screenshot of the completed transaction.</li>
+            <li>Complete the order form with your Gmail, broker, and MT5 account ID.</li>
+            <li>Wait for manual verification before delivery.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="order">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Order Ali Shah Gold EA</h2>
+        <p class="sub">Price: $100 USD per MT5 account license. Submit the form after making your payment.</p>
+      </div>
+      <div class="card">
+        <h3>Order & License Registration</h3>
+        <p>Prepare your full name, Gmail address, broker name, MT5 trading account ID, USDT BEP20 TXID, and payment screenshot.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSc2Z9NnZl-MXXtycJCkHWiAYDQrNBGGnXJyKFtirQ6-iXhjhA/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">Open Order Form ↗</a>
+        </div>
+        <p class="small">If the form shows editing controls or does not allow customers to submit, update its sharing/published responder link in Google Forms and replace this URL in index.html.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="faq">
+    <div class="wrap">
+      <div class="section-head"><h2>Frequently Asked Questions</h2></div>
+      <details><summary>How much does one license cost?</summary><p>One license costs $100 USD and is valid for one MT5 trading account.</p></details>
+      <details><summary>Can I use one license on multiple MT5 accounts?</summary><p>No. Each account requires its own separate license and $100 payment.</p></details>
+      <details><summary>When will I receive the EA?</summary><p>After the payment has been manually verified, the EA file and license code will be sent to the Gmail address supplied in the order form.</p></details>
+      <details><summary>Does the EA guarantee profit?</summary><p>No. Trading XAUUSD carries significant risk. Results can vary with market conditions, spreads, commissions, execution, leverage, and broker settings. Only trade money you can afford to lose, and test on a demo account first.</p></details>
+      <details><summary>Is the license code itself enough to restrict account use?</summary><p>Account restriction must be implemented in the EA's licensing logic. Website order collection and email delivery alone do not technically enforce a one-account license.</p></details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div><strong>Ali Shah Gold EA</strong><br>MT5 · XAUUSD (Gold)</div>
+    <div>© <span id="year"></span> Ali Shah Gold EA. All rights reserved.</div>
+  </div>
+  <div class="wrap small" style="margin-top:14px">Disclaimer: This website is for product information and order registration only, not financial advice. No profit or performance is guaranteed.</div>
+</footer>
+<script>
+  function copyWallet() {
+    const address = document.getElementById('wallet').textContent.trim();
+    const status = document.getElementById('copy-status');
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(address).then(() => { status.textContent = 'Address copied'; }).catch(() => { status.textContent = 'Please copy the address manually'; });
+    } else {
+      status.textContent = 'Please press and hold the address to copy it';
+    }
+  }
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
